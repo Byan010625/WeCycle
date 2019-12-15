@@ -10,7 +10,7 @@ class Intro extends StatelessWidget {
               begin: Alignment.bottomLeft,
               end: Alignment.topRight,
 
-              stops: [0.0, 0.95, 1.0],
+              stops: [0.0, .99, 1.0],
               colors: [
                 const Color(0xFF1DBCF7),
                 const Color(0xFF1E99F2),
@@ -19,57 +19,71 @@ class Intro extends StatelessWidget {
             ),
           ),
           child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Padding(
-                  padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.fromLTRB(20, 80, 20 , 20),
                   child: Text(
-                    "Welcome, User \n\tTo...",
+                    "Welcome, User",
                     style: TextStyle(
                         color: Colors.white,
                         fontFamily: 'Segoe',
-                        fontWeight: FontWeight.bold),
+                        fontWeight: FontWeight.bold,
+                        fontSize: 50),
                   )
               ),
               Padding(
-                padding: const EdgeInsets.all(20),
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20 , 20),
+                  child: Text(
+                    "To...",
+                    style: TextStyle(
+                        color: Colors.white,
+                        fontFamily: 'Segoe',
+                        fontWeight: FontWeight.bold,
+                        fontSize: 50),
+                  )
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(20, 60, 20, 20),
                 child: Image.asset('assets/images/WeCycle.png'),
               ),
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.fromLTRB(20, 150, 20, 20),
                 child: FlatButton(
-                  onPressed: null,
+                  onPressed: null, //TODO: ADD NEXT PAGE
+                  padding: const EdgeInsets.fromLTRB(100, 20, 100, 20),
                   child: Text(
                     "Sign up",
                     style: TextStyle(
                         fontFamily: 'Segoe',
-                        fontWeight: FontWeight.normal,
-                        color: Colors.white),
+                        fontWeight: FontWeight.w500,
+                        fontSize: 30,
+                        color: Colors.white
+                    ),
                   ),
                   shape: RoundedRectangleBorder(
-                      borderRadius: new BorderRadius.circular(20.0),
-                      side: BorderSide(color: Colors.white)
-                  ),
+                      borderRadius: new BorderRadius.circular(40.0),
+                      side: BorderSide(color: Colors.white).scale(2)),
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.fromLTRB(20,10,20,20),
                 child: FlatButton(
-                  onPressed: () {print("Hello");},
+                  onPressed: () {}, //TODO: ADD NEXT PAGE
                   color: Colors.white,
-                  textColor: Colors.blue,
+                  padding: const EdgeInsets.fromLTRB(100, 20, 100, 20),
                   child: Text(
                     "Sign in",
                     style: TextStyle(
                         fontFamily: 'Segoe',
-                        fontWeight: FontWeight.normal,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 30,
                         color: const Color(0xFF1E99F2)
                     ),
                   ),
                   shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(20.0),
-                      side: BorderSide(color: const Color(0xFF1E99F2))
-                  ),
+                    borderRadius: new BorderRadius.circular(40.0),
+                      side: BorderSide(color: Colors.white).scale(2)),
                 ),
               ),
             ],
