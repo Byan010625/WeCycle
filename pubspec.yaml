@@ -70,3 +70,16 @@ flutter:
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
+
+  assets:
+    - assets/images/WeCycle.png
+
+fonts:
+  - family:  Segoe
+    fonts:
+      - asset: assets/fonts/Segoe_UI.ttf
+      - asset: assets/fonts/Segoe_UI_Bold.ttf
+      - asset: assets/fonts/Segoe_UI_Semi_Bold.ttf
+
+
+
