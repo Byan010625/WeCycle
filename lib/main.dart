@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'Login/Intro.dart';
+import 'Login/intro.dart';
+import 'Login/signup.dart';
 
 void main() => runApp(MyApp());
 
@@ -8,7 +9,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Intro(),
+      home: SignUpPage(),
     );
   }
 }

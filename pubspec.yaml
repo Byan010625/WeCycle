@@ -73,6 +73,25 @@ flutter:
 
   assets:
     - assets/images/WeCycle.png
+    - assets/images/Blue_Circle.png
+    - assets/images/2x/Blue_Circle.png
+    - assets/images/3x/Blue_Circle.png
+    - assets/images/Teal_Circle.png
+    - assets/images/2x/Teal_Circle.png
+    - assets/images/3x/Teal_Circle.png
+    - assets/images/Ellipse_4.png
+    - assets/images/2x/Ellipse_4.png
+    - assets/images/3x/Ellipse_4.png
+    - assets/images/leftkeyboardarrow.png
+    - assets/images/2x/leftkeyboardarrow.png
+    - assets/images/3x/leftkeyboardarrow.png
+    - assets/images/rightkeyboardarrow.png
+    - assets/images/2x/rightkeyboardarrow.png
+    - assets/images/3x/rightkeyboardarrow.png
+    - assets/images/Rectangle_16.png
+    - assets/images/2x/Rectangle_16.png
+    - assets/images/3x/Rectangle_16.png
+
 
 fonts:
   - family:  Segoe
