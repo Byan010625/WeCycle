@@ -12,9 +12,13 @@ class _SignUpState extends State<SignUpPage>
     with WidgetsBindingObserver, TickerProviderStateMixin {
   AnimationController _slideboxcontroller;
   AnimationController _slideprofileboxcontroller;
+  AnimationController _textinanimationcontroller;
+  AnimationController _textoutanimationcontroller;
 
   Animation<Offset> _slideboxoffsetanimation;
   Animation<Offset> _slideprofileboxanimation;
+  Animation<double> _textoutanimation;
+  Animation<double> _textinanimation;
 
   DoubleLinkedQueue<Widget> infoBoxes;
   int keyInQueue;
@@ -30,10 +34,11 @@ class _SignUpState extends State<SignUpPage>
       vsync: this,
     );
     _slideboxcontroller.addStatusListener((state) {
-      if(state == AnimationStatus.completed){
+      if (state == AnimationStatus.completed) {
         setState(() {
           this.keyInQueue = 1;
           _slideprofileboxcontroller.forward(); //Assumes that the user went through the first info box
+          _textinanimationcontroller.forward();
         });
       }
     });
@@ -44,17 +49,32 @@ class _SignUpState extends State<SignUpPage>
       parent: _slideboxcontroller,
       curve: Curves.elasticInOut,
     ));
-
+    _textinanimationcontroller = AnimationController(
+        duration: const Duration(seconds: 1,),
+        vsync: this
+    );
+    _textoutanimationcontroller = AnimationController(
+        duration: const Duration(seconds: 1,),
+        vsync: this
+    );
+    _textoutanimation = Tween(
+      begin: 1.0,
+      end: 0.0,
+    ).animate(_textoutanimationcontroller);
+    _textinanimation = Tween(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(_textinanimationcontroller);
     _slideprofileboxcontroller = AnimationController(
-        duration: const Duration(seconds: 2),
+        duration: const Duration(seconds: 1),
         vsync: this
     );
     _slideprofileboxanimation = Tween<Offset>(
       begin: const Offset(1.0, 0.0),
       end: Offset.zero,
     ).animate(CurvedAnimation(
-        parent: _slideprofileboxcontroller,
-        curve: Curves.elasticIn,
+      parent: _slideprofileboxcontroller,
+      curve: Curves.bounceIn,
     ));
     _slideboxcontroller.stop(canceled: false);
     _slideprofileboxcontroller.stop(canceled: false);
@@ -71,11 +91,17 @@ class _SignUpState extends State<SignUpPage>
   Widget build(BuildContext context) {
     precacheImage(AssetImage("assets/images/Blue_Circle.png"), context);
     Image blueCircle = new Image.asset("assets/images/Blue_Circle.png");
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery
+        .of(context)
+        .size
+        .width;
+    double height = MediaQuery
+        .of(context)
+        .size
+        .height;
 
-    infoBoxes.add(signInfoBox(context, _slideboxcontroller));
-    infoBoxes.add(profileInfoBox(context, _slideprofileboxcontroller));
+    infoBoxes.add(signInfoBox(context));
+    infoBoxes.add(profileInfoBox(context));
 
     return Scaffold(
       body: SizedBox(
@@ -109,14 +135,9 @@ class _SignUpState extends State<SignUpPage>
               children: <Widget>[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(20, 150, 20, 10),
-                  child: Text("Lets get started.",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontFamily: 'Segoe',
-                          fontWeight: FontWeight.w600,
-                          fontSize: 40)),
+                  child: getCurrentText(),
                 ),
-               getCurrentInfoBox(),
+                getCurrentInfoBox(),
               ],
             )
           ],
@@ -124,18 +145,54 @@ class _SignUpState extends State<SignUpPage>
       ),
     );
   }
-  Widget getCurrentInfoBox(){
-    return keyInQueue == 0 ? SlideTransition(
-        position: _slideboxoffsetanimation,
-        child: infoBoxes.firstEntry().element) :
-    SlideTransition(
-        position: _slideprofileboxanimation,
-        child: infoBoxes.firstEntry().nextEntry().element);
+
+  Widget getCurrentText() {
+    if (keyInQueue == 0) {
+      return FadeTransition(
+          opacity: _textoutanimation,
+          child: Text("Lets get started.",
+              style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: 'Segoe',
+                  fontWeight: FontWeight.w600,
+                  fontSize: 40)),
+      );
+    } else { //keyInQueue = 1
+      return FadeTransition(
+        opacity: _textinanimation,
+        child: Text("Lets get to know you.",
+            style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Segoe',
+                fontWeight: FontWeight.w600,
+                fontSize: 35)),
+      );
+    }
   }
 
-  Widget profileInfoBox(BuildContext context, AnimationController controller) {
-    double infoBoxWidth = MediaQuery.of(context).size.width - 40;
-    double infoBoxHeight = MediaQuery.of(context).size.height - 300;
+  Widget getCurrentInfoBox() {
+    return keyInQueue == 0 ? SlideTransition(
+        position: _slideboxoffsetanimation,
+        child: infoBoxes
+            .firstEntry()
+            .element) :
+    SlideTransition(
+        position: _slideprofileboxanimation,
+        child: infoBoxes
+            .firstEntry()
+            .nextEntry()
+            .element);
+  }
+
+  Widget profileInfoBox(BuildContext context) {
+    double infoBoxWidth = MediaQuery
+        .of(context)
+        .size
+        .width - 40;
+    double infoBoxHeight = MediaQuery
+        .of(context)
+        .size
+        .height - 300;
     return Stack(
       children: <Widget>[
         Container(
@@ -179,7 +236,7 @@ class _SignUpState extends State<SignUpPage>
                           borderSide: BorderSide(color: Color(0xFF85C0B9))))),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 20, 250, 0),
+              padding: const EdgeInsets.fromLTRB(25, 20, 250, 0),
               child: Text("Phone Number",
                   style: TextStyle(
                       color: Color(0xFF85C0B9),
@@ -199,10 +256,10 @@ class _SignUpState extends State<SignUpPage>
                           borderSide: BorderSide(color: Color(0xFF85C0B9))))),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(300, 170, 10, 10),
+              padding: const EdgeInsets.fromLTRB(300, 150, 10, 10),
               child: FlatButton(
                 onPressed: () {
-                  controller.forward();
+
                 },
                 color: Color(0xFF00FE9C),
                 padding: const EdgeInsets.all(0),
@@ -220,9 +277,15 @@ class _SignUpState extends State<SignUpPage>
     );
   }
 
-  Widget signInfoBox(BuildContext context, AnimationController controller) {
-    double infoBoxWidth = MediaQuery.of(context).size.width - 40;
-    double infoBoxHeight = MediaQuery.of(context).size.height - 300;
+  Widget signInfoBox(BuildContext context) {
+    double infoBoxWidth = MediaQuery
+        .of(context)
+        .size
+        .width - 40;
+    double infoBoxHeight = MediaQuery
+        .of(context)
+        .size
+        .height - 300;
     return Stack(
       children: <Widget>[
         Container(
@@ -309,7 +372,8 @@ class _SignUpState extends State<SignUpPage>
               padding: const EdgeInsets.fromLTRB(300, 150, 10, 10),
               child: FlatButton(
                 onPressed: () {
-                  controller.forward();
+                  _slideboxcontroller.forward();
+                  _textoutanimationcontroller.forward();
                 },
                 color: Color(0xFF00FE9C),
                 padding: const EdgeInsets.all(0),
