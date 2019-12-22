@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:collection';
+import 'package:image_picker/image_picker.dart';
+import 'dart:io';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -10,95 +12,110 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpState extends State<SignUpPage>
     with WidgetsBindingObserver, TickerProviderStateMixin {
-  AnimationController _slideboxcontroller;
-  AnimationController _slideprofileboxcontroller;
-  AnimationController _textinanimationcontroller;
-  AnimationController _textoutanimationcontroller;
+  AnimationController _slideCirclesController;
 
-  Animation<Offset> _slideboxoffsetanimation;
-  Animation<Offset> _slideprofileboxanimation;
-  Animation<double> _textoutanimation;
-  Animation<double> _textinanimation;
+  AnimationController _slideBoxController;
+  AnimationController _slideProfileBoxController;
+  AnimationController _textInAnimationController;
+  AnimationController _textOutAnimationController;
+
+  Animation<Offset> _slideBlueCircleAnimation;
+  Animation<Offset> _slideTealCircleAnimation;
+  Animation<Offset> _slideBoxOffsetAnimation;
+  Animation<Offset> _slideProfileBoxAnimation;
+  Animation<double> _textOutAnimation;
+  Animation<double> _textInAnimation;
 
   DoubleLinkedQueue<Widget> infoBoxes;
   int keyInQueue;
 
+  File _profileImage;
 
   @override
   void initState() {
     super.initState();
     infoBoxes = new DoubleLinkedQueue();
     keyInQueue = 0;
-    _slideboxcontroller = AnimationController(
+
+    _slideCirclesController = AnimationController(
+        duration: const Duration(milliseconds: 1500),
+        vsync: this
+    );
+    _slideBoxController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
     );
-    _slideboxcontroller.addStatusListener((state) {
+    _slideBoxController.addStatusListener((state) {
       if (state == AnimationStatus.completed) {
         setState(() {
           this.keyInQueue = 1;
-          _slideprofileboxcontroller.forward(); //Assumes that the user went through the first info box
-          _textinanimationcontroller.forward();
+          _slideProfileBoxController.forward(); //Assumes that the user went through the first info box
+          _textInAnimationController.forward();
         });
       }
     });
-    _slideboxoffsetanimation = Tween<Offset>(
+    _slideBlueCircleAnimation = Tween<Offset>(
+      begin: Offset(1.0, 0),
+      end: Offset.zero,
+    ).animate(_slideCirclesController);
+    _slideTealCircleAnimation = Tween<Offset>(
+      begin: Offset(-1.0, 0),
+      end: Offset.zero,
+    ).animate(_slideCirclesController);
+    _slideBoxOffsetAnimation = Tween<Offset>(
       begin: Offset.zero,
       end: const Offset(-1.0, 0.0),
     ).animate(CurvedAnimation(
-      parent: _slideboxcontroller,
+      parent: _slideBoxController,
       curve: Curves.elasticInOut,
     ));
-    _textinanimationcontroller = AnimationController(
-        duration: const Duration(seconds: 1,),
-        vsync: this
-    );
-    _textoutanimationcontroller = AnimationController(
-        duration: const Duration(seconds: 1,),
-        vsync: this
-    );
-    _textoutanimation = Tween(
+    _textInAnimationController = AnimationController(
+        duration: const Duration(
+          seconds: 1,
+        ),
+        vsync: this);
+    _textOutAnimationController = AnimationController(
+        duration: const Duration(
+          seconds: 1,
+        ),
+        vsync: this);
+    _textOutAnimation = Tween(
       begin: 1.0,
       end: 0.0,
-    ).animate(_textoutanimationcontroller);
-    _textinanimation = Tween(
+    ).animate(_textOutAnimationController);
+    _textInAnimation = Tween(
       begin: 0.0,
       end: 1.0,
-    ).animate(_textinanimationcontroller);
-    _slideprofileboxcontroller = AnimationController(
-        duration: const Duration(seconds: 1),
-        vsync: this
-    );
-    _slideprofileboxanimation = Tween<Offset>(
+    ).animate(_textInAnimationController);
+    _slideProfileBoxController =
+        AnimationController(duration: const Duration(seconds: 1), vsync: this);
+    _slideProfileBoxAnimation = Tween<Offset>(
       begin: const Offset(1.0, 0.0),
       end: Offset.zero,
     ).animate(CurvedAnimation(
-      parent: _slideprofileboxcontroller,
-      curve: Curves.bounceIn,
+      parent: _slideProfileBoxController,
+      curve: Curves.elasticInOut,
     ));
-    _slideboxcontroller.stop(canceled: false);
-    _slideprofileboxcontroller.stop(canceled: false);
+    _slideCirclesController.forward();
+    _slideBoxController.stop(canceled: false);
+    _slideProfileBoxController.stop(canceled: false);
   }
 
   @override
   void dispose() {
     super.dispose();
-    _slideboxcontroller.dispose();
-    _slideprofileboxcontroller.dispose();
+    _textOutAnimationController.dispose();
+    _textInAnimationController.dispose();
+    _slideBoxController.dispose();
+    _slideProfileBoxController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     precacheImage(AssetImage("assets/images/Blue_Circle.png"), context);
     Image blueCircle = new Image.asset("assets/images/Blue_Circle.png");
-    double width = MediaQuery
-        .of(context)
-        .size
-        .width;
-    double height = MediaQuery
-        .of(context)
-        .size
-        .height;
+    double width = MediaQuery.of(context).size.width;
+    double height = MediaQuery.of(context).size.height;
 
     infoBoxes.add(signInfoBox(context));
     infoBoxes.add(profileInfoBox(context));
@@ -114,21 +131,41 @@ class _SignUpState extends State<SignUpPage>
               right: -170,
               height: 600,
               width: 600,
-              child: blueCircle,
+              child: SlideTransition(
+                position: _slideBlueCircleAnimation,
+                child: blueCircle,
+              )
             ),
             Positioned(
               bottom: -400,
               right: -15,
               height: 600,
               width: 600,
-              child: Image.asset("assets/images/Teal_Circle.png"),
+                child: SlideTransition(
+                  position: _slideTealCircleAnimation,
+                  child: Image.asset("assets/images/Teal_Circle.png"),
+                )
             ),
             Positioned(
               left: 10,
               top: 45,
               width: 40,
               height: 60,
-              child: Image.asset("assets/images/leftkeyboardarrow.png"),
+              child: GestureDetector(
+                onTap: () {
+                  if(keyInQueue == 1){
+                    _slideProfileBoxController.reverse().then((state) {
+                      setState(() {
+                        keyInQueue = 0;
+                        _slideBoxController.reverse();
+                        _textOutAnimationController.reverse();
+                      });
+                    });
+                    _textInAnimationController.reverse();
+                  }
+                },
+                child: Image.asset("assets/images/leftkeyboardarrow.png"),
+              ),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -149,17 +186,18 @@ class _SignUpState extends State<SignUpPage>
   Widget getCurrentText() {
     if (keyInQueue == 0) {
       return FadeTransition(
-          opacity: _textoutanimation,
-          child: Text("Lets get started.",
-              style: TextStyle(
-                  color: Colors.white,
-                  fontFamily: 'Segoe',
-                  fontWeight: FontWeight.w600,
-                  fontSize: 40)),
+        opacity: _textOutAnimation,
+        child: Text("Lets get started.",
+            style: TextStyle(
+                color: Colors.white,
+                fontFamily: 'Segoe',
+                fontWeight: FontWeight.w600,
+                fontSize: 40)),
       );
-    } else { //keyInQueue = 1
+    } else {
+      //keyInQueue = 1
       return FadeTransition(
-        opacity: _textinanimation,
+        opacity: _textInAnimation,
         child: Text("Lets get to know you.",
             style: TextStyle(
                 color: Colors.white,
@@ -171,28 +209,18 @@ class _SignUpState extends State<SignUpPage>
   }
 
   Widget getCurrentInfoBox() {
-    return keyInQueue == 0 ? SlideTransition(
-        position: _slideboxoffsetanimation,
-        child: infoBoxes
-            .firstEntry()
-            .element) :
-    SlideTransition(
-        position: _slideprofileboxanimation,
-        child: infoBoxes
-            .firstEntry()
-            .nextEntry()
-            .element);
+    return keyInQueue == 0
+        ? SlideTransition(
+            position: _slideBoxOffsetAnimation,
+            child: infoBoxes.firstEntry().element)
+        : SlideTransition(
+            position: _slideProfileBoxAnimation,
+            child: infoBoxes.firstEntry().nextEntry().element);
   }
 
   Widget profileInfoBox(BuildContext context) {
-    double infoBoxWidth = MediaQuery
-        .of(context)
-        .size
-        .width - 40;
-    double infoBoxHeight = MediaQuery
-        .of(context)
-        .size
-        .height - 300;
+    double infoBoxWidth = MediaQuery.of(context).size.width - 40;
+    double infoBoxHeight = MediaQuery.of(context).size.height - 300;
     return Stack(
       children: <Widget>[
         Container(
@@ -216,7 +244,60 @@ class _SignUpState extends State<SignUpPage>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
             Padding(
-              padding: const EdgeInsets.fromLTRB(0, 65, 275, 0),
+              padding: const EdgeInsets.fromLTRB(20, 30, 20, 10),
+              child: Text("So that your friends can find you.",
+                  style: TextStyle(
+                      color: Color(0xFFA7A7A7),
+                      fontFamily: 'Segoe',
+                      fontWeight: FontWeight.w500,
+                      fontSize: 15)),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 10, 275, 0),
+              child: Text("Profile",
+                  style: TextStyle(
+                      color: Color(0xFF85C0B9),
+                      fontFamily: 'Segoe',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 15)),
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 60),
+              child: Stack(
+                children: <Widget>[
+                  GestureDetector(
+                    onTap: () {
+                      getImage();
+                    },
+                    child: Container(
+                      width: 110,
+                      height: 110,
+                      child: _profileImage != null ? Image.file(_profileImage) : Row(
+                        children: <Widget>[
+                          Icon(
+                            Icons.add,
+                            color: Color(0xFF85C0B9),
+                            size: 15,
+                          ),
+                          Text("Add a picture",
+                              style: TextStyle(
+                                  color: Color(0xFF85C0B9),
+                                  fontFamily: 'Segoe',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 15)),
+                        ],
+                      ),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        border: Border.all(color: Color(0xFF85C0B9), width: 2),
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(0, 20, 275, 0),
               child: Text("Name",
                   style: TextStyle(
                       color: Color(0xFF85C0B9),
@@ -236,41 +317,19 @@ class _SignUpState extends State<SignUpPage>
                           borderSide: BorderSide(color: Color(0xFF85C0B9))))),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(25, 20, 250, 0),
-              child: Text("Phone Number",
-                  style: TextStyle(
-                      color: Color(0xFF85C0B9),
-                      fontFamily: 'Segoe',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 15)),
-            ),
-            Padding(
-              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 60),
-              child: TextField(
-                  decoration: InputDecoration(
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF85C0B9)),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFF85C0B9))))),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(300, 150, 10, 10),
-              child: FlatButton(
-                onPressed: () {
-
-                },
-                color: Color(0xFF00FE9C),
-                padding: const EdgeInsets.all(0),
-                shape: CircleBorder(side: BorderSide(color: Color(0xFF00FE9C))),
-                child: Container(
-                  width: 30,
-                  height: 50,
-                  child: Image.asset("assets/images/rightkeyboardarrow.png"),
+                padding: const EdgeInsets.fromLTRB(300, 175, 10, 10),
+                child: FlatButton(
+                  onPressed: () {},
+                  color: Color(0xFF00FE9C),
+                  padding: const EdgeInsets.all(0),
+                  shape: CircleBorder(side: BorderSide(color: Color(0xFF00FE9C))),
+                  child: Container(
+                    width: 30,
+                    height: 50,
+                    child: Image.asset("assets/images/rightkeyboardarrow.png"),
+                  ),
                 ),
               ),
-            )
           ],
         ),
       ],
@@ -278,14 +337,8 @@ class _SignUpState extends State<SignUpPage>
   }
 
   Widget signInfoBox(BuildContext context) {
-    double infoBoxWidth = MediaQuery
-        .of(context)
-        .size
-        .width - 40;
-    double infoBoxHeight = MediaQuery
-        .of(context)
-        .size
-        .height - 300;
+    double infoBoxWidth = MediaQuery.of(context).size.width - 40;
+    double infoBoxHeight = MediaQuery.of(context).size.height - 300;
     return Stack(
       children: <Widget>[
         Container(
@@ -372,8 +425,8 @@ class _SignUpState extends State<SignUpPage>
               padding: const EdgeInsets.fromLTRB(300, 150, 10, 10),
               child: FlatButton(
                 onPressed: () {
-                  _slideboxcontroller.forward();
-                  _textoutanimationcontroller.forward();
+                  _slideBoxController.forward();
+                  _textOutAnimationController.forward();
                 },
                 color: Color(0xFF00FE9C),
                 padding: const EdgeInsets.all(0),
@@ -390,5 +443,12 @@ class _SignUpState extends State<SignUpPage>
       ],
     );
   }
-}
 
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _profileImage = image;
+    });
+  }
+
+}

@@ -21,14 +21,14 @@ class _SignInState extends State<SignInPage> with WidgetsBindingObserver {
         child: Stack(
           children: <Widget>[
             Positioned(
-              top: -160,
+              top: -180,
               right: -250,
               height: 600,
               width: 600,
               child: tealCircle,
             ),
             Positioned(
-              top: -150,
+              top: -180,
               right: 10,
               height: 600,
               width: 600,
@@ -46,7 +46,7 @@ class _SignInState extends State<SignInPage> with WidgetsBindingObserver {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
                 Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 130, 20, 20),
+                  padding: const EdgeInsets.fromLTRB(20, 100, 20, 20),
                   child: Text("Welcome back.",
                   style: TextStyle(
                     color: Colors.white,
@@ -59,7 +59,7 @@ class _SignInState extends State<SignInPage> with WidgetsBindingObserver {
                     Column(
                       children: <Widget>[
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 0, 275, 0),
+                          padding: const EdgeInsets.fromLTRB(0, 50, 275, 0),
                           child: Text("Email",
                             style: TextStyle(
                                 color: const Color(0xFF00839B),
@@ -79,7 +79,7 @@ class _SignInState extends State<SignInPage> with WidgetsBindingObserver {
                                 borderSide: BorderSide(color: Color(0xFF00839B))))),
                               ),
                         Padding(
-                          padding: const EdgeInsets.fromLTRB(0, 50, 250, 0),
+                          padding: const EdgeInsets.fromLTRB(0, 25, 250, 0),
                           //const EdgeInsets.fromLTRB(left, top, right, bottom)
                           child: Text("Password",
                               style: TextStyle(
@@ -110,7 +110,7 @@ class _SignInState extends State<SignInPage> with WidgetsBindingObserver {
 //                              );
                             }, //TODO: CODE SET UP, REPLACE '***' WITH NAME OF NEXT PAGE AND UNCOMMENT
                             color: const Color(0xFF1E99F2),
-                            padding: const EdgeInsets.fromLTRB(100, 20, 100, 20),
+                            padding: const EdgeInsets.fromLTRB(100, 15, 100, 15),
                             child: Text(
                               "Sign in",
                               style: TextStyle(
