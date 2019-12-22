@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:wecycle/Login/signin.dart';
+import 'package:wecycle/Login/signup.dart';
 
 class Intro extends StatelessWidget {
   @override
@@ -50,7 +52,13 @@ class Intro extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(20, 150, 20, 20),
                 child: FlatButton(
-                  onPressed: null, //TODO: ADD NEXT PAGE
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) =>
+                      SignUpPage()),
+                    );
+                  },
                   padding: const EdgeInsets.fromLTRB(100, 20, 100, 20),
                   child: Text(
                     "Sign up",
@@ -69,7 +77,13 @@ class Intro extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.fromLTRB(20,10,20,20),
                 child: FlatButton(
-                  onPressed: () {}, //TODO: ADD NEXT PAGE
+                  onPressed: () {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) =>
+                        SignInPage()),
+                    );
+                  },
                   color: Colors.white,
                   padding: const EdgeInsets.fromLTRB(100, 20, 100, 20),
                   child: Text(
