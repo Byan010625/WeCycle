@@ -12,7 +12,7 @@ class WeCycleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: SignUpPage(),
+      home: SignInPage(),
     );
   }
 }
