@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:io' show Platform;
 
 class SignInPage extends StatefulWidget {
   @override
@@ -12,7 +13,7 @@ class _SignInState extends State<SignInPage> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     Image blueCircle = new Image.asset("assets/images/Blue_Circle.png");
     Image tealCircle = new Image.asset("assets/images/Teal_Circle.png");
-    Image leftArrow = new Image.asset("assets/images/leftkeyboardarrow.png");
+    Icon leftArrow = Platform.isAndroid ? Icon(Icons.arrow_back, color: Colors.white, size: 30) : Icon(Icons.arrow_back_ios, color: Colors.white, size: 30);
 
     return Scaffold(
       body: SizedBox(

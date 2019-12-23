@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'dart:collection';
 import 'package:image_picker/image_picker.dart';
+import 'dart:io' show Platform;
 import 'dart:io';
+import 'dart:developer';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -12,8 +14,8 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpState extends State<SignUpPage>
     with WidgetsBindingObserver, TickerProviderStateMixin {
-  AnimationController _slideCirclesController;
 
+  AnimationController _slideCirclesController;
   AnimationController _slideBoxController;
   AnimationController _slideProfileBoxController;
   AnimationController _textInAnimationController;
@@ -38,9 +40,7 @@ class _SignUpState extends State<SignUpPage>
     keyInQueue = 0;
 
     _slideCirclesController = AnimationController(
-        duration: const Duration(milliseconds: 1500),
-        vsync: this
-    );
+        duration: const Duration(milliseconds: 1500), vsync: this);
     _slideBoxController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -49,7 +49,8 @@ class _SignUpState extends State<SignUpPage>
       if (state == AnimationStatus.completed) {
         setState(() {
           this.keyInQueue = 1;
-          _slideProfileBoxController.forward(); //Assumes that the user went through the first info box
+          _slideProfileBoxController
+              .forward(); //Assumes that the user went through the first info box
           _textInAnimationController.forward();
         });
       }
@@ -110,6 +111,13 @@ class _SignUpState extends State<SignUpPage>
     _slideProfileBoxController.dispose();
   }
 
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
+    setState(() {
+      _profileImage = image;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     precacheImage(AssetImage("assets/images/Blue_Circle.png"), context);
@@ -127,25 +135,23 @@ class _SignUpState extends State<SignUpPage>
         child: Stack(
           children: <Widget>[
             Positioned(
-              top: -250,
-              right: -170,
-              height: 600,
-              width: 600,
-              child: SlideTransition(
-                position: _slideBlueCircleAnimation,
-                child: blueCircle,
-              )
-            ),
+                top: -250,
+                right: -170,
+                height: 600,
+                width: 600,
+                child: SlideTransition(
+                  position: _slideBlueCircleAnimation,
+                  child: blueCircle,
+                )),
             Positioned(
-              bottom: -400,
-              right: -15,
-              height: 600,
-              width: 600,
+                bottom: -400,
+                right: -15,
+                height: 600,
+                width: 600,
                 child: SlideTransition(
                   position: _slideTealCircleAnimation,
                   child: Image.asset("assets/images/Teal_Circle.png"),
-                )
-            ),
+                )),
             Positioned(
               left: 10,
               top: 45,
@@ -153,7 +159,7 @@ class _SignUpState extends State<SignUpPage>
               height: 60,
               child: GestureDetector(
                 onTap: () {
-                  if(keyInQueue == 1){
+                  if (keyInQueue == 1) {
                     _slideProfileBoxController.reverse().then((state) {
                       setState(() {
                         keyInQueue = 0;
@@ -164,7 +170,7 @@ class _SignUpState extends State<SignUpPage>
                     _textInAnimationController.reverse();
                   }
                 },
-                child: Image.asset("assets/images/leftkeyboardarrow.png"),
+                child: Platform.isAndroid ? Icon(Icons.arrow_back, color: Colors.white, size: 40,) : Icon(Icons.arrow_back_ios, color: Colors.white, size: 40),
               ),
             ),
             Column(
@@ -221,6 +227,7 @@ class _SignUpState extends State<SignUpPage>
   Widget profileInfoBox(BuildContext context) {
     double infoBoxWidth = MediaQuery.of(context).size.width - 40;
     double infoBoxHeight = MediaQuery.of(context).size.height - 300;
+
     return Stack(
       children: <Widget>[
         Container(
@@ -263,39 +270,36 @@ class _SignUpState extends State<SignUpPage>
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 60),
-              child: Stack(
-                children: <Widget>[
-                  GestureDetector(
+              child: GestureDetector(
                     onTap: () {
                       getImage();
                     },
                     child: Container(
                       width: 110,
                       height: 110,
-                      child: _profileImage != null ? Image.file(_profileImage) : Row(
-                        children: <Widget>[
-                          Icon(
-                            Icons.add,
-                            color: Color(0xFF85C0B9),
-                            size: 15,
-                          ),
-                          Text("Add a picture",
-                              style: TextStyle(
+                      child: _profileImage != null ? null : Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.add,
                                   color: Color(0xFF85C0B9),
-                                  fontFamily: 'Segoe',
-                                  fontWeight: FontWeight.w400,
-                                  fontSize: 15)),
-                        ],
-                      ),
+                                  size: 15,
+                                ),
+                                Text("Add a picture",
+                                    style: TextStyle(
+                                        color: Color(0xFF85C0B9),
+                                        fontFamily: 'Segoe',
+                                        fontWeight: FontWeight.w400,
+                                        fontSize: 15)),
+                              ],
+                            ),
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
                         border: Border.all(color: Color(0xFF85C0B9), width: 2),
+                        image: _profileImage != null ? DecorationImage(image: FileImage(_profileImage), fit: BoxFit.fill) : null,
                       ),
                     ),
                   )
-                ],
               ),
-            ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 20, 275, 0),
               child: Text("Name",
@@ -309,6 +313,7 @@ class _SignUpState extends State<SignUpPage>
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 60),
               child: TextField(
                   decoration: InputDecoration(
+                      hintText: "Ex. Jane Doe",
                       border: UnderlineInputBorder(
                         borderSide: BorderSide(color: Color(0xFF85C0B9)),
                         borderRadius: BorderRadius.circular(10),
@@ -317,19 +322,19 @@ class _SignUpState extends State<SignUpPage>
                           borderSide: BorderSide(color: Color(0xFF85C0B9))))),
             ),
             Padding(
-                padding: const EdgeInsets.fromLTRB(300, 175, 10, 10),
-                child: FlatButton(
-                  onPressed: () {},
-                  color: Color(0xFF00FE9C),
-                  padding: const EdgeInsets.all(0),
-                  shape: CircleBorder(side: BorderSide(color: Color(0xFF00FE9C))),
-                  child: Container(
-                    width: 30,
-                    height: 50,
-                    child: Image.asset("assets/images/rightkeyboardarrow.png"),
-                  ),
+              padding: const EdgeInsets.fromLTRB(300, 175, 10, 10),
+              child: FlatButton(
+                onPressed: () {},
+                color: Color(0xFF00FE9C),
+                padding: const EdgeInsets.all(0),
+                shape: CircleBorder(side: BorderSide(color: Color(0xFF00FE9C))),
+                child: Container(
+                  width: 30,
+                  height: 50,
+                  child: Platform.isAndroid ? Icon(Icons.arrow_forward, color: Colors.white, size: 30) : Icon(Icons.arrow_forward_ios, color: Colors.white, size: 30),
                 ),
               ),
+            ),
           ],
         ),
       ],
@@ -374,6 +379,7 @@ class _SignUpState extends State<SignUpPage>
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 60),
               child: TextField(
                   decoration: InputDecoration(
+                    hintText: "Ex. youremail@gmail.com",
                       border: UnderlineInputBorder(
                         borderSide: BorderSide(color: Color(0xFF85C0B9)),
                         borderRadius: BorderRadius.circular(10),
@@ -393,6 +399,7 @@ class _SignUpState extends State<SignUpPage>
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 60),
               child: TextField(
+                obscureText: true,
                   decoration: InputDecoration(
                       border: UnderlineInputBorder(
                         borderSide: BorderSide(color: Color(0xFF85C0B9)),
@@ -413,6 +420,7 @@ class _SignUpState extends State<SignUpPage>
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 60),
               child: TextField(
+                  obscureText: true,
                   decoration: InputDecoration(
                       border: UnderlineInputBorder(
                         borderSide: BorderSide(color: Color(0xFF85C0B9)),
@@ -434,7 +442,7 @@ class _SignUpState extends State<SignUpPage>
                 child: Container(
                   width: 30,
                   height: 50,
-                  child: Image.asset("assets/images/rightkeyboardarrow.png"),
+                  child: Platform.isAndroid ? Icon(Icons.arrow_forward, color: Colors.white, size: 30) : Icon(Icons.arrow_forward_ios, color: Colors.white, size: 30),
                 ),
               ),
             )
@@ -442,13 +450,6 @@ class _SignUpState extends State<SignUpPage>
         ),
       ],
     );
-  }
-
-  Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.gallery);
-    setState(() {
-      _profileImage = image;
-    });
   }
 
 }
