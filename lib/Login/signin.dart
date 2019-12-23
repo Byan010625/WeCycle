@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
-import '../CameraManager/cameramanager.dart';
+import 'package:wecycle/CameraManager//cameramanager.dart';
 
 class SignInPage extends StatefulWidget {
   @override

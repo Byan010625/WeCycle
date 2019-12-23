@@ -9,8 +9,8 @@ import 'package:giffy_dialog/giffy_dialog.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'CirclePainter.dart';
-import '../main.dart';
-import 'button_icons_icons.dart';
+import 'package:wecycle/main.dart';
+import 'button_icons_icons.dart' show ButtonIcons;
 
 class CameraManager extends StatefulWidget {
   @override

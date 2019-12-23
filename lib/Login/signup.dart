@@ -4,7 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io' show Platform;
 import 'dart:io';
 import 'dart:developer';
-import '../CameraManager/cameramanager.dart';
+import 'package:wecycle/CameraManager/cameramanager.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
