@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io' show Platform;
+import '../CameraManager/cameramanager.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -40,7 +41,12 @@ class _SignInState extends State<SignInPage> with WidgetsBindingObserver {
               top: 45,
               width: 40,
               height: 60,
-              child: leftArrow,
+              child: GestureDetector(
+                onTap: () {
+                    Navigator.pop(context);
+                },
+                child: leftArrow,
+              ),
             ),
             Column(
               mainAxisSize: MainAxisSize.max,
@@ -104,12 +110,13 @@ class _SignInState extends State<SignInPage> with WidgetsBindingObserver {
                           padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
                           child: FlatButton(
                             onPressed: () {
-//                              Navigator.push(
-//                                  context,
-//                                  MaterialPageRoute(builder: (context) =>
-//                                  ***),
-//                              );
-                            }, //TODO: CODE SET UP, REPLACE '***' WITH NAME OF NEXT PAGE AND UNCOMMENT
+                              //TODO: ADD AUTHENTICATION
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (context) =>
+                                  CameraManager()),
+                              );
+                            },
                             color: const Color(0xFF1E99F2),
                             padding: const EdgeInsets.fromLTRB(100, 15, 100, 15),
                             child: Text(

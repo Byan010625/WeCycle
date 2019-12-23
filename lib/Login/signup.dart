@@ -4,6 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io' show Platform;
 import 'dart:io';
 import 'dart:developer';
+import '../CameraManager/cameramanager.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -168,6 +169,8 @@ class _SignUpState extends State<SignUpPage>
                       });
                     });
                     _textInAnimationController.reverse();
+                  } else if(keyInQueue == 0){
+                    Navigator.pop(context);
                   }
                 },
                 child: Platform.isAndroid ? Icon(Icons.arrow_back, color: Colors.white, size: 40,) : Icon(Icons.arrow_back_ios, color: Colors.white, size: 40),
@@ -324,7 +327,14 @@ class _SignUpState extends State<SignUpPage>
             Padding(
               padding: const EdgeInsets.fromLTRB(300, 175, 10, 10),
               child: FlatButton(
-                onPressed: () {},
+                onPressed: () {
+                  //TODO: ADD AUTHENTICATION AND FIREBASE SUPPORT
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) =>
+                        CameraManager()),
+                  );
+                },
                 color: Color(0xFF00FE9C),
                 padding: const EdgeInsets.all(0),
                 shape: CircleBorder(side: BorderSide(color: Color(0xFF00FE9C))),

@@ -97,7 +97,7 @@ flutter:
     - assets/images/Rectangle_16.png
     - assets/images/2x/Rectangle_16.png
     - assets/images/3x/Rectangle_16.png
-
+    - assets/animations/checkmark-animation.gif
 
 fonts:
   - family:  Segoe

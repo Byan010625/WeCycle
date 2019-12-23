@@ -303,7 +303,7 @@ class DisplayedImageScreen extends State<DisplayImageToScreen>{
   void showWin(){
     showDialog(
         context: context,builder: (_) => AssetGiffyDialog(
-          image: new Image.asset('assets/checkmark-animation.gif', fit: BoxFit.cover,),
+          image: new Image.asset('assets/animations/checkmark-animation.gif', fit: BoxFit.cover,),
           title: Text('You earn 3 coins!',
           style: TextStyle(
             fontSize: 22.0, fontWeight: FontWeight.w600),
