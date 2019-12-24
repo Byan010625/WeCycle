@@ -3,7 +3,7 @@ import 'Login/intro.dart';
 import 'Login/signup.dart';
 import 'Login/signin.dart';
 import 'package:camera/camera.dart';
-import 'CameraManager/cameramanager.dart';
+import 'package:wecycle/CameraManager/cameramanager.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 
@@ -12,7 +12,7 @@ class WeCycleApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Intro(),
+      home: CameraManager(),
     );
   }
 }

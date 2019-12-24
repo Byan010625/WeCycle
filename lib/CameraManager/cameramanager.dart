@@ -26,13 +26,18 @@ class _CameraManagerState extends State<CameraManager>
   String imagePath;
   double controllerRatio;
 
-  IconButton challengesButton = new IconButton(icon: new Icon(ButtonIcons.ic_star_24px, color: Colors.white, size: 43,), onPressed: null);
-  IconButton friendsButton = new IconButton(icon: new Icon(ButtonIcons.ic_people_24px, color: Colors.white, size: 40,), onPressed: null);
+  IconButton challengesButton;
+  IconButton friendsButton;
+
+  File _profileImage;
+
 
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
+    challengesButton = new IconButton(icon: new Icon(ButtonIcons.ic_star_24px, color: Colors.white, size: 43,), onPressed: () {});
+    friendsButton = new IconButton(icon: new Icon(ButtonIcons.ic_people_24px, color: Colors.white, size: 40,), onPressed: () {});
     controller = CameraController(cameras[0], ResolutionPreset.veryHigh);
     controller.initialize().then((_) {
       if (!mounted) {
@@ -105,7 +110,34 @@ class _CameraManagerState extends State<CameraManager>
                 ),
             ],
           ),
-
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: <Widget>[
+            Container(
+              width: 50,
+              height: 50,
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                border: Border.all(color: Color(0xFF85C0B9), width: 2),
+                image: _profileImage != null ? DecorationImage(image: FileImage(_profileImage), fit: BoxFit.fill) : null,
+              ),
+            ),
+            Container(
+              child: Row(
+                children: <Widget>[
+                  Image.asset(""),
+                  Text("123",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontFamily: 'Segoe',
+                      fontWeight: FontWeight.w400,
+                      fontSize: 5)),
+                  Icon(Icons.add, size: 10, color: Color(0xFFFCEE21),)
+                ],
+              ),
+            )
+          ],
+        )
       ],
       )
   );
