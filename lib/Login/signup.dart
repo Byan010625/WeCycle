@@ -3,8 +3,8 @@ import 'dart:collection';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io' show Platform;
 import 'dart:io';
-import 'dart:developer';
 import 'package:wecycle/CameraManager/cameramanager.dart';
+import 'package:wecycle/globals.dart' as globals;
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -15,12 +15,13 @@ class SignUpPage extends StatefulWidget {
 
 class _SignUpState extends State<SignUpPage>
     with WidgetsBindingObserver, TickerProviderStateMixin {
-
   AnimationController _slideCirclesController;
   AnimationController _slideBoxController;
   AnimationController _slideProfileBoxController;
   AnimationController _textInAnimationController;
   AnimationController _textOutAnimationController;
+  AnimationController _fadeInBoxController;
+  AnimationController _firstTextInContoller;
 
   Animation<Offset> _slideBlueCircleAnimation;
   Animation<Offset> _slideTealCircleAnimation;
@@ -28,6 +29,8 @@ class _SignUpState extends State<SignUpPage>
   Animation<Offset> _slideProfileBoxAnimation;
   Animation<double> _textOutAnimation;
   Animation<double> _textInAnimation;
+  Animation<double> _fadeInBoxAnimation;
+  Animation<double> _firstTextInAnimation;
 
   DoubleLinkedQueue<Widget> infoBoxes;
   int keyInQueue;
@@ -41,7 +44,7 @@ class _SignUpState extends State<SignUpPage>
     keyInQueue = 0;
 
     _slideCirclesController = AnimationController(
-        duration: const Duration(milliseconds: 1500), vsync: this);
+        duration: const Duration(milliseconds: 800), vsync: this);
     _slideBoxController = AnimationController(
       duration: const Duration(seconds: 2),
       vsync: this,
@@ -98,7 +101,25 @@ class _SignUpState extends State<SignUpPage>
       parent: _slideProfileBoxController,
       curve: Curves.elasticInOut,
     ));
-    _slideCirclesController.forward();
+
+    _fadeInBoxController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 1000));
+    _firstTextInContoller = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 1000));
+
+    _fadeInBoxAnimation = Tween(
+        begin: 0.0,
+        end: 1.0).animate(_fadeInBoxController);
+    _firstTextInAnimation = Tween(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(_firstTextInContoller);
+
+    _slideCirclesController.forward().then((state) {
+      _firstTextInContoller.forward().then((state) {
+        _fadeInBoxController.forward();
+      });
+    });
     _slideBoxController.stop(canceled: false);
     _slideProfileBoxController.stop(canceled: false);
   }
@@ -122,7 +143,6 @@ class _SignUpState extends State<SignUpPage>
   @override
   Widget build(BuildContext context) {
     precacheImage(AssetImage("assets/images/Blue_Circle.png"), context);
-    Image blueCircle = new Image.asset("assets/images/Blue_Circle.png");
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
 
@@ -142,7 +162,7 @@ class _SignUpState extends State<SignUpPage>
                 width: 600,
                 child: SlideTransition(
                   position: _slideBlueCircleAnimation,
-                  child: blueCircle,
+                  child: globals.blueCircle,
                 )),
             Positioned(
                 bottom: -400,
@@ -151,7 +171,7 @@ class _SignUpState extends State<SignUpPage>
                 width: 600,
                 child: SlideTransition(
                   position: _slideTealCircleAnimation,
-                  child: Image.asset("assets/images/Teal_Circle.png"),
+                  child: globals.tealCircle,
                 )),
             Positioned(
               left: 10,
@@ -169,21 +189,33 @@ class _SignUpState extends State<SignUpPage>
                       });
                     });
                     _textInAnimationController.reverse();
-                  } else if(keyInQueue == 0){
+                  } else if (keyInQueue == 0) {
                     Navigator.pop(context);
                   }
                 },
-                child: Platform.isAndroid ? Icon(Icons.arrow_back, color: Colors.white, size: 40,) : Icon(Icons.arrow_back_ios, color: Colors.white, size: 40),
+                child: Platform.isAndroid
+                    ? Icon(
+                        Icons.arrow_back,
+                        color: Colors.white,
+                        size: 40,
+                      )
+                    : Icon(Icons.arrow_back_ios, color: Colors.white, size: 40),
               ),
             ),
             Column(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(20, 150, 20, 10),
-                  child: getCurrentText(),
+                FadeTransition(
+                  opacity: _firstTextInAnimation,
+                  child: Padding(
+                    padding: const EdgeInsets.fromLTRB(20, 150, 20, 10),
+                    child: getCurrentText(),
+                  ),
                 ),
-                getCurrentInfoBox(),
+                FadeTransition(
+                  opacity: _fadeInBoxAnimation,
+                  child: getCurrentInfoBox(),
+                ),
               ],
             )
           ],
@@ -272,37 +304,42 @@ class _SignUpState extends State<SignUpPage>
                       fontSize: 15)),
             ),
             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 60),
-              child: GestureDetector(
-                    onTap: () {
-                      getImage();
-                    },
-                    child: Container(
-                      width: 110,
-                      height: 110,
-                      child: _profileImage != null ? null : Row(
-                              children: <Widget>[
-                                Icon(
-                                  Icons.add,
-                                  color: Color(0xFF85C0B9),
-                                  size: 15,
-                                ),
-                                Text("Add a picture",
-                                    style: TextStyle(
-                                        color: Color(0xFF85C0B9),
-                                        fontFamily: 'Segoe',
-                                        fontWeight: FontWeight.w400,
-                                        fontSize: 15)),
-                              ],
-                            ),
-                      decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        border: Border.all(color: Color(0xFF85C0B9), width: 2),
-                        image: _profileImage != null ? DecorationImage(image: FileImage(_profileImage), fit: BoxFit.fill) : null,
-                      ),
+                padding:
+                    const EdgeInsets.symmetric(vertical: 0, horizontal: 60),
+                child: GestureDetector(
+                  onTap: () {
+                    getImage();
+                  },
+                  child: Container(
+                    width: 115,
+                    height: 115,
+                    child: _profileImage != null
+                        ? null
+                        : Row(
+                            children: <Widget>[
+                              Icon(
+                                Icons.add,
+                                color: Color(0xFF85C0B9),
+                                size: 15,
+                              ),
+                              Text("Add a picture",
+                                  style: TextStyle(
+                                      color: Color(0xFF85C0B9),
+                                      fontFamily: 'Segoe',
+                                      fontWeight: FontWeight.w400,
+                                      fontSize: 15)),
+                            ],
+                          ),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      border: Border.all(color: Color(0xFF85C0B9), width: 2),
+                      image: _profileImage != null
+                          ? DecorationImage(
+                              image: FileImage(_profileImage), fit: BoxFit.fill)
+                          : null,
                     ),
-                  )
-              ),
+                  ),
+                )),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 20, 275, 0),
               child: Text("Name",
@@ -325,14 +362,13 @@ class _SignUpState extends State<SignUpPage>
                           borderSide: BorderSide(color: Color(0xFF85C0B9))))),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(300, 175, 10, 10),
+              padding: const EdgeInsets.fromLTRB(300, 170, 10, 10),
               child: FlatButton(
                 onPressed: () {
                   //TODO: ADD AUTHENTICATION AND FIREBASE SUPPORT
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) =>
-                        CameraManager()),
+                    MaterialPageRoute(builder: (context) => CameraManager()),
                   );
                 },
                 color: Color(0xFF00FE9C),
@@ -341,7 +377,10 @@ class _SignUpState extends State<SignUpPage>
                 child: Container(
                   width: 30,
                   height: 50,
-                  child: Platform.isAndroid ? Icon(Icons.arrow_forward, color: Colors.white, size: 30) : Icon(Icons.arrow_forward_ios, color: Colors.white, size: 30),
+                  child: Platform.isAndroid
+                      ? Icon(Icons.arrow_forward, color: Colors.white, size: 30)
+                      : Icon(Icons.arrow_forward_ios,
+                          color: Colors.white, size: 30),
                 ),
               ),
             ),
@@ -389,7 +428,7 @@ class _SignUpState extends State<SignUpPage>
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 60),
               child: TextField(
                   decoration: InputDecoration(
-                    hintText: "Ex. youremail@gmail.com",
+                      hintText: "Ex. youremail@gmail.com",
                       border: UnderlineInputBorder(
                         borderSide: BorderSide(color: Color(0xFF85C0B9)),
                         borderRadius: BorderRadius.circular(10),
@@ -409,7 +448,7 @@ class _SignUpState extends State<SignUpPage>
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 60),
               child: TextField(
-                obscureText: true,
+                  obscureText: true,
                   decoration: InputDecoration(
                       border: UnderlineInputBorder(
                         borderSide: BorderSide(color: Color(0xFF85C0B9)),
@@ -452,7 +491,10 @@ class _SignUpState extends State<SignUpPage>
                 child: Container(
                   width: 30,
                   height: 50,
-                  child: Platform.isAndroid ? Icon(Icons.arrow_forward, color: Colors.white, size: 30) : Icon(Icons.arrow_forward_ios, color: Colors.white, size: 30),
+                  child: Platform.isAndroid
+                      ? Icon(Icons.arrow_forward, color: Colors.white, size: 30)
+                      : Icon(Icons.arrow_forward_ios,
+                          color: Colors.white, size: 30),
                 ),
               ),
             )
@@ -461,5 +503,4 @@ class _SignUpState extends State<SignUpPage>
       ],
     );
   }
-
 }

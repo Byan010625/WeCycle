@@ -20,8 +20,7 @@ class CameraManager extends StatefulWidget {
 }
 
 class _CameraManagerState extends State<CameraManager>
-    with WidgetsBindingObserver{
-
+    with WidgetsBindingObserver {
   CameraController controller;
   String imagePath;
   double controllerRatio;
@@ -31,13 +30,24 @@ class _CameraManagerState extends State<CameraManager>
 
   File _profileImage;
 
-
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
-    challengesButton = new IconButton(icon: new Icon(ButtonIcons.ic_star_24px, color: Colors.white, size: 43,), onPressed: () {});
-    friendsButton = new IconButton(icon: new Icon(ButtonIcons.ic_people_24px, color: Colors.white, size: 40,), onPressed: () {});
+    challengesButton = new IconButton(
+        icon: new Icon(
+          ButtonIcons.ic_star_24px,
+          color: Colors.white,
+          size: 43,
+        ),
+        onPressed: () {});
+    friendsButton = new IconButton(
+        icon: new Icon(
+          ButtonIcons.ic_people_24px,
+          color: Colors.white,
+          size: 40,
+        ),
+        onPressed: () {});
     controller = CameraController(cameras[0], ResolutionPreset.veryHigh);
     controller.initialize().then((_) {
       if (!mounted) {
@@ -54,7 +64,6 @@ class _CameraManagerState extends State<CameraManager>
     super.dispose();
   }
 
-
   //final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
@@ -62,90 +71,142 @@ class _CameraManagerState extends State<CameraManager>
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]);
-  return Scaffold(
-      body: Stack(children: <Widget>[
-          _cameraPreviewWidget(),
-          snapButton(),
-          Row (
-            crossAxisAlignment: CrossAxisAlignment.end,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: <Widget>[
-               Column(
-                 mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Padding( //Challenges button
-                      padding: const EdgeInsets.fromLTRB(20,20,20,5),
-                      child: challengesButton,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(33,0,20,20),
-                      child: Text('Challenges',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.0,
-                          fontFamily: 'Segoe',
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: <Widget>[
-                    Padding( //Friends button
-                      padding: const EdgeInsets.fromLTRB(20,20,40,5),
-                      child: friendsButton,
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(20,0,33,20),
-                      child: Text('Friends',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 16.0,
-                          fontFamily: 'Segoe',
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-            ],
-          ),
+    return Scaffold(
+        body: Stack(
+      children: <Widget>[
+        _cameraPreviewWidget(),
+        snapButton(),
         Row(
+          crossAxisAlignment: CrossAxisAlignment.end,
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: <Widget>[
-            Container(
-              width: 50,
-              height: 50,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                border: Border.all(color: Color(0xFF85C0B9), width: 2),
-                image: _profileImage != null ? DecorationImage(image: FileImage(_profileImage), fit: BoxFit.fill) : null,
-              ),
-            ),
-            Container(
-              child: Row(
-                children: <Widget>[
-                  Image.asset(""),
-                  Text("123",
-                  style: TextStyle(
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Padding(
+                  //Challenges button
+                  padding: const EdgeInsets.fromLTRB(20, 20, 20, 5),
+                  child: Container(
+                    child: Image.asset("assets/images/ic_star.png"),
+                    width: 43,
+                    height: 43,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 20, 20),
+                  child: Text(
+                    'Challenges',
+                    style: TextStyle(
                       color: Colors.white,
+                      fontSize: 16.0,
                       fontFamily: 'Segoe',
-                      fontWeight: FontWeight.w400,
-                      fontSize: 5)),
-                  Icon(Icons.add, size: 10, color: Color(0xFFFCEE21),)
-                ],
-              ),
-            )
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            Column(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: <Widget>[
+                Padding(
+                  //Friends button
+                  padding: const EdgeInsets.fromLTRB(25, 20, 40, 5),
+                  child: Container(
+                    child: Image.asset("assets/images/ic_people.png"),
+                    width: 40,
+                    height: 40,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 0, 33, 20),
+                  child: Text(
+                    'Friends',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 16.0,
+                      fontFamily: 'Segoe',
+                    ),
+                  ),
+                ),
+              ],
+            ),
           ],
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(20, 40, 10, 20),
+          //TODO: Need to change based on device
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Container(
+                width: 50,
+                height: 50,
+                padding: const EdgeInsets.all(20),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  border: Border.all(color: Color(0xFF85C0B9), width: 2),
+                  image: _profileImage != null
+                      ? DecorationImage(
+                          image: FileImage(_profileImage), fit: BoxFit.fill)
+                      : null,
+                ),
+              ),
+              Container(
+                width: 110,
+                height: 35,
+                padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                child: Stack(children: <Widget>[
+                  Container(
+                    width: 50,
+                    height: 25,
+                    padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                    child: Row(
+                      children: <Widget>[
+                        Padding(
+                          child: Text("123",
+                              style: TextStyle(
+                                  color: Colors.white,
+                                  fontFamily: 'Segoe',
+                                  fontWeight: FontWeight.w400,
+                                  fontSize: 15)),
+                          padding: const EdgeInsets.fromLTRB(2, 0, 0, 0),
+                        ),
+                        Padding(
+                          child: Image.asset(
+                            "assets/images/AddButton.png",
+                            height: 10,
+                            width: 10,
+                          ),
+                          padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+                        )
+                      ],
+                    ),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.rectangle,
+                      borderRadius: new BorderRadius.circular(20),
+                      color: Color(0xFF4A4949),
+                    ),
+                  ),
+                  Positioned(
+                    child: Image.asset(
+                      "assets/images/coin.png",
+                      height: 25,
+                      width: 25,
+                    ),
+                    right: 45,
+                    bottom: 10,
+                  ),
+                ]),
+              ),
+            ],
+          ),
         )
       ],
-      )
-  );
+    ));
   }
 
-
   Widget _cameraPreviewWidget() {
-    if(controller != null && controller.value.isInitialized){
+    if (controller != null && controller.value.isInitialized) {
       final size = MediaQuery.of(context).size;
       final deviceRatio = size.width / size.height;
       controllerRatio = controller.value.aspectRatio;
@@ -159,7 +220,8 @@ class _CameraManagerState extends State<CameraManager>
         ),
       );
     } else {
-      return const Text('Camera not on',
+      return const Text(
+        'Camera not on',
         style: TextStyle(
           color: Colors.white,
           fontSize: 24.0,
@@ -169,8 +231,9 @@ class _CameraManagerState extends State<CameraManager>
     }
   }
 
-  Widget snapButton(){
-    Alignment alignmentConfig = new Alignment(Alignment.bottomCenter.x, Alignment.bottomCenter.y - .25);
+  Widget snapButton() {
+    Alignment alignmentConfig =
+        new Alignment(Alignment.bottomCenter.x, Alignment.bottomCenter.y - .25);
     return Align(
       alignment: alignmentConfig,
       child: RawMaterialButton(
@@ -178,11 +241,10 @@ class _CameraManagerState extends State<CameraManager>
         shape: CircleBorder().scale(2.0),
         child: CustomPaint(
           painter: CirclePainter(
-            color: Colors.white,
-            strokeWidth: 5,
-            isAntialias: true,
-            paintingStyle: PaintingStyle.stroke
-          ),
+              color: Colors.white,
+              strokeWidth: 5,
+              isAntialias: true,
+              paintingStyle: PaintingStyle.stroke),
         ),
       ),
     );
@@ -199,12 +261,14 @@ class _CameraManagerState extends State<CameraManager>
           Navigator.push(
               context,
               MaterialPageRoute(
-              builder: (context) => DisplayImageToScreen(imagePath: imagePath, controllerRatio: controllerRatio,),
-              )
-          );
+                builder: (context) => DisplayImageToScreen(
+                  imagePath: imagePath,
+                  controllerRatio: controllerRatio,
+                ),
+              ));
         });
-        if (filePath != null){}
-          //showInSnackBar('Picture saved to $filePath');
+        if (filePath != null) {}
+        //showInSnackBar('Picture saved to $filePath');
       }
     });
   }
@@ -232,39 +296,39 @@ class _CameraManagerState extends State<CameraManager>
     }
     return filePath;
   }
+
   String timestamp() => DateTime.now().millisecondsSinceEpoch.toString();
 
-
-  Widget profileButton(){
+  Widget profileButton() {
     return Align(
       alignment: Alignment.topLeft,
       child: Padding(
-          padding: const EdgeInsets.all(20),
-          child: CircleAvatar(backgroundImage: AssetImage("avatar.png"), radius: 20,),
+        padding: const EdgeInsets.all(20),
+        child: CircleAvatar(
+          backgroundImage: AssetImage("avatar.png"),
+          radius: 20,
+        ),
       ),
     );
   }
-
 }
 
-class DisplayImageToScreen extends StatefulWidget{
-
+class DisplayImageToScreen extends StatefulWidget {
   static const platform = const MethodChannel('com.teamblnd/imgclassif');
   final String imagePath;
   final double controllerRatio;
 
-  const DisplayImageToScreen({Key key, this.imagePath, this.controllerRatio}) : super(key: key);
+  const DisplayImageToScreen({Key key, this.imagePath, this.controllerRatio})
+      : super(key: key);
 
   @override
   State<StatefulWidget> createState() {
     // TODO: implement createState
     return DisplayedImageScreen();
   }
-
 }
 
-class DisplayedImageScreen extends State<DisplayImageToScreen>{
-
+class DisplayedImageScreen extends State<DisplayImageToScreen> {
   String imagePath;
   double controllerRatio;
 
@@ -281,11 +345,12 @@ class DisplayedImageScreen extends State<DisplayImageToScreen>{
       DeviceOrientation.portraitUp,
     ]);
     return Scaffold(
-      body: Stack(children: <Widget>[
+        body: Stack(
+      children: <Widget>[
         imageScreen(),
         predictButton(),
-      ],)
-    );
+      ],
+    ));
   }
 
   Widget imageScreen() {
@@ -302,22 +367,21 @@ class DisplayedImageScreen extends State<DisplayImageToScreen>{
     );
   }
 
-  Widget predictButton(){
+  Widget predictButton() {
     return Align(
         alignment: Alignment.bottomCenter,
-        child:
-        Padding(
+        child: Padding(
           padding: const EdgeInsets.all(20),
           child: FloatingActionButton(
-              shape: RoundedRectangleBorder(borderRadius: new BorderRadius.all(new Radius.circular(10))),
-              child: Text("Scan!"),
-              onPressed: onPredictButtonPressed,
-            ),
-        )
-    );
+            shape: RoundedRectangleBorder(
+                borderRadius: new BorderRadius.all(new Radius.circular(10))),
+            child: Text("Scan!"),
+            onPressed: onPredictButtonPressed,
+          ),
+        ));
   }
 
-  void onPredictButtonPressed(){
+  void onPredictButtonPressed() {
     showWin();
     /*
     isRecyclableObject(this.imagePath).then((bool value) {
@@ -332,29 +396,38 @@ class DisplayedImageScreen extends State<DisplayImageToScreen>{
     */
   }
 
-  void showWin(){
+  void showWin() {
     showDialog(
-        context: context,builder: (_) => AssetGiffyDialog(
-          image: new Image.asset('assets/animations/checkmark-animation.gif', fit: BoxFit.cover,),
-          title: Text('You earn 3 coins!',
-          style: TextStyle(
-            fontSize: 22.0, fontWeight: FontWeight.w600),
-          ),
-          description: Text('Good job! Keep recycling!',
-          textAlign: TextAlign.center,
-          style: TextStyle(),
-          ),
-          entryAnimation: EntryAnimation.TOP,
-          onOkButtonPressed: () {Navigator.of(context).pop(); Navigator.of(context).pop();},
-          onlyOkButton: true,
-    ) );
+        context: context,
+        builder: (_) => AssetGiffyDialog(
+              image: new Image.asset(
+                'assets/animations/checkmark-animation.gif',
+                fit: BoxFit.cover,
+              ),
+              title: Text(
+                'You earn 3 coins!',
+                style: TextStyle(fontSize: 22.0, fontWeight: FontWeight.w600),
+              ),
+              description: Text(
+                'Good job! Keep recycling!',
+                textAlign: TextAlign.center,
+                style: TextStyle(),
+              ),
+              entryAnimation: EntryAnimation.TOP,
+              onOkButtonPressed: () {
+                Navigator.of(context).pop();
+                Navigator.of(context).pop();
+              },
+              onlyOkButton: true,
+            ));
   }
 
   Future<bool> isRecyclableObject(String imagePath) async {
     bool isRecyclable = false;
-    try{
-      isRecyclable = await DisplayImageToScreen.platform.invokeMethod('getClassificationResult',imagePath);
-    } on PlatformException catch(e){
+    try {
+      isRecyclable = await DisplayImageToScreen.platform
+          .invokeMethod('getClassificationResult', imagePath);
+    } on PlatformException catch (e) {
       log("Failed!: " + e.message);
     }
     return isRecyclable;

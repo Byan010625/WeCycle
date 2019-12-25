@@ -99,6 +99,19 @@ flutter:
     - assets/images/2x/Rectangle_16.png
     - assets/images/3x/Rectangle_16.png
     - assets/animations/checkmark-animation.gif
+    - assets/images/coin.png
+    - assets/images/2x/coin.png
+    - assets/images/3x/coin.png
+    - assets/images/AddButton.png
+    - assets/images/2x/AddButton.png
+    - assets/images/3x/AddButton.png
+    - assets/images/ic_star.png
+    - assets/images/2x/ic_star.png
+    - assets/images/3x/ic_star.png
+    - assets/images/ic_people.png
+    - assets/images/2x/ic_people.png
+    - assets/images/3x/ic_people.png
+
 
 fonts:
   - family:  Segoe
