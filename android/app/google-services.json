@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "374723393225",
+    "firebase_url": "https://wecycle-c110c.firebaseio.com",
+    "project_id": "wecycle-c110c",
+    "storage_bucket": "wecycle-c110c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:374723393225:android:c27c2b103ef8ef097d3f18",
+        "android_client_info": {
+          "package_name": "com.teamblnd.wecycle"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "374723393225-vvqn4db0ocbj1eq5mvlf7csuum5btagc.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.teamblnd.wecycle",
+            "certificate_hash": "2910b11d22ac45511ced3c185b3841cf1a9eba3d"
+          }
+        },
+        {
+          "client_id": "374723393225-ut5v0an2knv574f2letfca8f6gkbf3eq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDJDoO5o_NuLV8ZQB0Z6k-gwbYQM9SaYTU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "374723393225-ut5v0an2knv574f2letfca8f6gkbf3eq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
