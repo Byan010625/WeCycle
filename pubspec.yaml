@@ -111,6 +111,9 @@ flutter:
     - assets/images/ic_people.png
     - assets/images/2x/ic_people.png
     - assets/images/3x/ic_people.png
+    - assets/images/Earth.png
+    - assets/images/2x/Earth.png
+    - assets/images/3x/Earth.png
 
 
 fonts:

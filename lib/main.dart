@@ -24,22 +24,22 @@ class _MainState extends State<WeCycleApp> {
     globals.blueCircle = new Container(
       decoration: BoxDecoration(
         shape: BoxShape.circle,
-        gradient: LinearGradient(
-            begin: Alignment.topLeft,
-            end: Alignment.bottomRight,
-            colors: [Color(0xFF0085FF), Color(0xFF00A8FE), Color(0XFF00D8FD)],
-            stops: [0, 0.65, 1]
+        gradient: RadialGradient(
+            center: Alignment.bottomRight,
+            radius: 1,
+            colors: [Color(0xFF00D8F8), Color(0xFF00A8FE), Color(0XFF0086FE)],
+            stops: [0, 0.5, 1]
         )
       ),
     );
     globals.tealCircle = new Container(
       decoration: BoxDecoration(
           shape: BoxShape.circle,
-          gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [Color(0xFF00D4FD), Color(0xFF00C7FD), Color(0XFF00A8FE)],
-              stops: [0, 0.85, 1]
+          gradient: RadialGradient(
+              center: Alignment.topLeft,
+              radius: 1,
+              colors: [Color(0xFF00D4FD), Color(0xFF00E7E8), Color(0XFF00FBD3)],
+              stops: [0, 0.7, 1]
           )
       ),
     );
@@ -53,7 +53,7 @@ class _MainState extends State<WeCycleApp> {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: CameraManager(),
+      home: Intro(),
     );
   }
 
