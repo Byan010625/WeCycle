@@ -3,6 +3,7 @@ import 'dart:io' show Platform;
 import 'package:wecycle/CameraManager/cameramanager.dart';
 import 'package:wecycle/main.dart';
 import 'package:wecycle/globals.dart' as globals;
+import 'package:wecycle/services/Authentication.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -22,6 +23,13 @@ class _SignInState extends State<SignInPage>
   Animation<double> _welcomeTextAnimation;
   Animation<double> _showLoginAnimation;
 
+  AuthService authService = new AuthService();
+
+  TextEditingController emailController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
+
+  TextField emailTextField;
+  TextField passwordTextField;
 
   @override
   void initState() {
@@ -60,6 +68,31 @@ class _SignInState extends State<SignInPage>
     Icon leftArrow = Platform.isAndroid
         ? Icon(Icons.arrow_back, color: Colors.white, size: 30)
         : Icon(Icons.arrow_back_ios, color: Colors.white, size: 30);
+
+    emailTextField = TextField(
+        controller: emailController,
+        decoration: InputDecoration(
+            border: UnderlineInputBorder(
+              borderSide:
+              BorderSide(color: Color(0xFF00839B)),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                    color: Color(0xFF00839B)))));
+
+    passwordTextField = TextField(
+        controller: passwordController,
+        decoration: InputDecoration(
+            border: UnderlineInputBorder(
+              borderSide:
+              BorderSide(color: Color(0xFF00839B)),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(
+                    color: Color(0xFF00839B)))));
+
     return Scaffold(
       body: SizedBox(
         width: MediaQuery.of(context).size.width,
@@ -133,16 +166,7 @@ class _SignInState extends State<SignInPage>
                           Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 0, horizontal: 60),
-                            child: TextField(
-                                decoration: InputDecoration(
-                                    border: UnderlineInputBorder(
-                                      borderSide:
-                                      BorderSide(color: Color(0xFF00839B)),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Color(0xFF00839B))))),
+                            child: emailTextField,
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(0, 25, 250, 0),
@@ -157,27 +181,24 @@ class _SignInState extends State<SignInPage>
                           Padding(
                             padding: const EdgeInsets.symmetric(
                                 vertical: 0, horizontal: 60),
-                            child: TextField(
-                                decoration: InputDecoration(
-                                    border: UnderlineInputBorder(
-                                      borderSide:
-                                      BorderSide(color: Color(0xFF00839B)),
-                                      borderRadius: BorderRadius.circular(10),
-                                    ),
-                                    focusedBorder: UnderlineInputBorder(
-                                        borderSide: BorderSide(
-                                            color: Color(0xFF00839B))))),
+                            child: passwordTextField,
                           ),
                           Padding(
                             padding: const EdgeInsets.fromLTRB(20, 50, 20, 0),
                             child: FlatButton(
                               onPressed: () {
                                 //TODO: ADD AUTHENTICATION
-                                Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => CameraManager()),
-                                );
+                                authService.signInWithEmailAndPassword(emailController.text, passwordController.text).then((firebaseUser) {
+                                    if(firebaseUser != null){
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => CameraManager()),
+                                      );
+                                    } else {
+                                      //TODO: ADD FAILURE
+                                    }
+                                });
                               },
                               color: const Color(0xFF1E99F2),
                               padding:

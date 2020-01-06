@@ -5,6 +5,10 @@ import 'dart:io' show Platform;
 import 'dart:io';
 import 'package:wecycle/CameraManager/cameramanager.dart';
 import 'package:wecycle/globals.dart' as globals;
+import 'package:wecycle/services/Authentication.dart';
+import 'package:wecycle/services/FriendService.dart';
+import 'package:wecycle/services/UserRecordService.dart';
+import 'package:wecycle/services/UserService.dart';
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -36,6 +40,14 @@ class _SignUpState extends State<SignUpPage>
   int keyInQueue;
 
   File _profileImage;
+
+  AuthService authService = new AuthService();
+
+  TextEditingController emailController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
+
+  TextField emailTextField;
+  TextField passwordTextField;
 
   @override
   void initState() {
@@ -148,6 +160,28 @@ class _SignUpState extends State<SignUpPage>
 
     infoBoxes.add(signInfoBox(context));
     infoBoxes.add(profileInfoBox(context));
+
+    emailTextField = TextField(
+        controller: emailController,
+        decoration: InputDecoration(
+            hintText: "Ex. youremail@gmail.com",
+            border: UnderlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFF85C0B9)),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFF85C0B9)))));
+
+    passwordTextField = TextField(
+        controller: passwordController,
+        obscureText: true,
+        decoration: InputDecoration(
+            border: UnderlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFF85C0B9)),
+              borderRadius: BorderRadius.circular(10),
+            ),
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: Color(0xFF85C0B9)))));
 
     return Scaffold(
       body: SizedBox(
@@ -426,15 +460,7 @@ class _SignUpState extends State<SignUpPage>
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 60),
-              child: TextField(
-                  decoration: InputDecoration(
-                      hintText: "Ex. youremail@gmail.com",
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF85C0B9)),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFF85C0B9))))),
+              child: emailTextField,
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 20, 250, 0),
@@ -447,15 +473,7 @@ class _SignUpState extends State<SignUpPage>
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 60),
-              child: TextField(
-                  obscureText: true,
-                  decoration: InputDecoration(
-                      border: UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFF85C0B9)),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      focusedBorder: UnderlineInputBorder(
-                          borderSide: BorderSide(color: Color(0xFF85C0B9))))),
+              child: passwordTextField,
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 20, 200, 0),
@@ -482,8 +500,12 @@ class _SignUpState extends State<SignUpPage>
               padding: const EdgeInsets.fromLTRB(300, 150, 10, 10),
               child: FlatButton(
                 onPressed: () {
-                  _slideBoxController.forward();
-                  _textOutAnimationController.forward();
+                  authService.registerWithEmailAndPassword(emailController.text, passwordController.text).then((user) {
+                    if(user != null){
+                      _slideBoxController.forward();
+                      _textOutAnimationController.forward();
+                    }
+                  });
                 },
                 color: Color(0xFF00FE9C),
                 padding: const EdgeInsets.all(0),
