@@ -6,9 +6,7 @@ import 'dart:io';
 import 'package:wecycle/CameraManager/cameramanager.dart';
 import 'package:wecycle/globals.dart' as globals;
 import 'package:wecycle/services/Authentication.dart';
-import 'package:wecycle/services/FriendService.dart';
-import 'package:wecycle/services/UserRecordService.dart';
-import 'package:wecycle/services/UserService.dart';
+
 
 class SignUpPage extends StatefulWidget {
   @override
@@ -43,8 +41,8 @@ class _SignUpState extends State<SignUpPage>
 
   AuthService authService = new AuthService();
 
-  TextEditingController emailController = new TextEditingController();
-  TextEditingController passwordController = new TextEditingController();
+  final TextEditingController emailController = new TextEditingController();
+  final TextEditingController passwordController = new TextEditingController();
 
   TextField emailTextField;
   TextField passwordTextField;
@@ -160,28 +158,6 @@ class _SignUpState extends State<SignUpPage>
 
     infoBoxes.add(signInfoBox(context));
     infoBoxes.add(profileInfoBox(context));
-
-    emailTextField = TextField(
-        controller: emailController,
-        decoration: InputDecoration(
-            hintText: "Ex. youremail@gmail.com",
-            border: UnderlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFF85C0B9)),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFF85C0B9)))));
-
-    passwordTextField = TextField(
-        controller: passwordController,
-        obscureText: true,
-        decoration: InputDecoration(
-            border: UnderlineInputBorder(
-              borderSide: BorderSide(color: Color(0xFF85C0B9)),
-              borderRadius: BorderRadius.circular(10),
-            ),
-            focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: Color(0xFF85C0B9)))));
 
     return Scaffold(
       body: SizedBox(
@@ -518,7 +494,9 @@ class _SignUpState extends State<SignUpPage>
               padding: const EdgeInsets.fromLTRB(300, 150, 10, 10),
               child: FlatButton(
                 onPressed: () {
-                  authService.registerWithEmailAndPassword(emailController.text, passwordController.text).then((user) {
+                  String email = emailController.text.toString().substring(0,emailController.text.toString().length-1);
+                  String password = passwordController.text.toString();
+                  authService.registerWithEmailAndPassword(email, password).then((user) {
                     if(user != null){
                       _slideBoxController.forward();
                       _textOutAnimationController.forward();

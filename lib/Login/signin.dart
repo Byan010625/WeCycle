@@ -189,7 +189,9 @@ class _SignInState extends State<SignInPage>
                             child: FlatButton(
                               onPressed: () {
                                 //TODO: ADD AUTHENTICATION
-                                authService.signInWithEmailAndPassword(emailController.text, passwordController.text).then((firebaseUser) {
+                                String email = emailController.text.toString().substring(0,emailController.text.toString().length-1);
+                                String password = passwordController.text.toString();
+                                authService.signInWithEmailAndPassword(email, password).then((firebaseUser) {
                                     if(firebaseUser != null){
                                       Navigator.push(
                                         context,
