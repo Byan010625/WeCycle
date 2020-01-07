@@ -83,6 +83,7 @@ class _SignInState extends State<SignInPage>
 
     passwordTextField = TextField(
         controller: passwordController,
+        obscureText: true,
         decoration: InputDecoration(
             border: UnderlineInputBorder(
               borderSide:

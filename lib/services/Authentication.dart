@@ -54,9 +54,10 @@ class AuthService{
 
 }
 
+/*
 main()
 {
   AuthService auth = new AuthService();
   auth.registerWithEmailAndPassword("tom@gmail.com", "hiiiiiiiiiii");
 
-}
+}*/

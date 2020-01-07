@@ -460,7 +460,16 @@ class _SignUpState extends State<SignUpPage>
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 60),
-              child: emailTextField,
+              child: TextField(
+                  controller: emailController,
+                  decoration: InputDecoration(
+                      hintText: "Ex. youremail@gmail.com",
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFF85C0B9)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFF85C0B9))))),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 20, 250, 0),
@@ -473,7 +482,16 @@ class _SignUpState extends State<SignUpPage>
             ),
             Padding(
               padding: const EdgeInsets.symmetric(vertical: 0, horizontal: 60),
-              child: passwordTextField,
+              child: TextField(
+                  controller: passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                      border: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Color(0xFF85C0B9)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      focusedBorder: UnderlineInputBorder(
+                          borderSide: BorderSide(color: Color(0xFF85C0B9))))),
             ),
             Padding(
               padding: const EdgeInsets.fromLTRB(0, 20, 200, 0),
