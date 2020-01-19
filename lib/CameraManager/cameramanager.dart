@@ -314,7 +314,7 @@ class _CameraManagerState extends State<CameraManager>
 }
 
 class DisplayImageToScreen extends StatefulWidget {
-  static const platform = const MethodChannel('com.teamblnd/imgclassif');
+  static const platform = const MethodChannel('com.teamblnd.wecycle/imgclassif');
   final String imagePath;
   final double controllerRatio;
 
@@ -382,8 +382,6 @@ class DisplayedImageScreen extends State<DisplayImageToScreen> {
   }
 
   void onPredictButtonPressed() {
-    showWin();
-    /*
     isRecyclableObject(this.imagePath).then((bool value) {
       if(value){
         setState(() {
@@ -393,7 +391,6 @@ class DisplayedImageScreen extends State<DisplayImageToScreen> {
         });
       }
     });
-    */
   }
 
   void showWin() {
